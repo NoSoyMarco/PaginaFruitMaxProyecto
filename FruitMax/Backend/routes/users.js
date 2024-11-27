@@ -1,40 +1,42 @@
+// routes/users.js
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const router = express.Router();
+const connection = require('../database'); // Importa tu archivo de conexión a la base de datos
 
-// Registro de usuarios
-router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al registrar el usuario' });
-  }
+// Registro de usuario
+router.post('/register', (req, res) => {
+  const { nombre, email, password } = req.body;
+
+  const query = 'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)';
+  connection.query(query, [nombre, email, password], (error, results) => {
+    if (error) {
+      console.error('Error al registrar usuario:', error);
+      res.status(500).json({ message: 'Error al registrar usuario' });
+      return;
+    }
+    res.status(201).json({ message: 'Usuario registrado exitosamente', id: results.insertId });
+  });
 });
 
-// Inicio de sesión
-router.post('/login', async (req, res) => {
+// Login de usuario
+router.post('/login', (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ error: 'Usuario no encontrado' });
+
+  const query = 'SELECT * FROM usuarios WHERE email = ? AND password = ?';
+  connection.query(query, [email, password], (error, results) => {
+    if (error) {
+      console.error('Error al iniciar sesión:', error);
+      res.status(500).json({ message: 'Error al iniciar sesión' });
+      return;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).json({ error: 'Contraseña incorrecta' });
+    if (results.length > 0) {
+      res.json({ message: 'Inicio de sesión exitoso', nombre: results[0].nombre });
+    } else {
+      res.status(401).json({ message: 'Credenciales incorrectas' });
     }
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
-  } catch (error) {
-    res.status(400).json({ error: 'Error al iniciar sesión' });
-  }
+  });
 });
 
 module.exports = router;
+

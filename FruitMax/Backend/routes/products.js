@@ -1,26 +1,37 @@
+// routes/products.js
 const express = require('express');
-const Product = require('../models/Product');
 const router = express.Router();
+const connection = require('../database'); // Importa tu archivo de conexión a la base de datos
 
 // Obtener todos los productos
-router.get('/', async (req, res) => {
-  try {
-    const products = await Product.findAll();
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los productos' });
-  }
+router.get('/', (req, res) => {
+  const query = 'SELECT * FROM productos';
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error('Error al obtener productos:', error);
+      res.status(500).json({ message: 'Error al obtener productos' });
+      return;
+    }
+    res.json(results);
+  });
 });
 
-// Agregar un producto nuevo
-router.post('/', async (req, res) => {
-  const { name, description, price, image } = req.body;
-  try {
-    const product = await Product.create({ name, description, price, image });
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(400).json({ error: 'Error al agregar el producto' });
-  }
+// Agregar un nuevo producto
+router.post('/', (req, res) => {
+  const { nombre, precio, imagen_url } = req.body;
+
+  const query = 'INSERT INTO productos (nombre, precio, imagen_url) VALUES (?, ?, ?)';
+  connection.query(query, [nombre, precio, imagen_url], (error, results) => {
+    if (error) {
+      console.error('Error al agregar producto:', error);
+      res.status(500).json({ message: 'Error al agregar producto' });
+      return;
+    }
+    res.status(201).json({ message: 'Producto agregado exitosamente', id: results.insertId });
+  });
 });
 
 module.exports = router;
+
+

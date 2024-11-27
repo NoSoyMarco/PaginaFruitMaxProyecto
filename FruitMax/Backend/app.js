@@ -1,29 +1,23 @@
+// app.js
 const express = require('express');
-const dotenv = require('dotenv');
-const sequelize = require('./database');
-const productRoutes = require('./routes/products');
-const userRoutes = require('./routes/users');
+const cors = require('cors');
+const connection = require('./database'); // Conexión a la base de datos
+const usersRoutes = require('./routes/users'); // Importa las rutas de usuarios
+const productsRoutes = require('./routes/products'); // Importa las rutas de productos
 
-// Configurar variables de entorno
-dotenv.config();
-
-// Inicializar la aplicación
 const app = express();
+const port = 3000;
 
-// Middlewares
-app.use(express.json()); // Permitir JSON en el body de las peticiones
+app.use(cors());
+app.use(express.json());
 
-// Rutas
-app.use('/api/products', productRoutes);
-app.use('/api/users', userRoutes);
-
-// Sincronizar con la base de datos
-sequelize.sync()
-  .then(() => console.log('Base de datos sincronizada'))
-  .catch(error => console.error('Error al sincronizar la base de datos:', error));
+// Usar las rutas
+app.use('/users', usersRoutes); // Ahora las rutas de usuarios estarán en /users
+app.use('/productos', productsRoutes); // Ahora las rutas de productos estarán en /productos
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 });
+
+

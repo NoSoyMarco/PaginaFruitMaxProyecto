@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Búsqueda - FruitMax</title>
-    <link rel="stylesheet" href="assets/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Productos</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-    <h2>Resultados de la Búsqueda</h2>
-    <section id="resultados">
-        <!-- Aquí se mostrarán los productos de la búsqueda -->
+  <header>
+    <h1>FruitMax - Búsqueda de Productos</h1>
+  </header>
+
+  <main>
+    <section id="busqueda">
+      <h2>Encuentra lo que buscas</h2>
+      <!-- Campo de entrada para búsqueda -->
+      <input type="text" id="buscador" placeholder="Buscar productos...">
+      <!-- Botón de búsqueda -->
+      <button id="btn-buscar">Buscar</button>
     </section>
-    
-    <script src="assets/busqueda.js"></script>
+
+    <section id="resultados">
+      <!-- Aquí se mostrarán los resultados de búsqueda dinámicamente -->
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2024 FruitMax. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Archivo JavaScript -->
+  <script src="js/busqueda.js"></script>
 </body>
 </html>

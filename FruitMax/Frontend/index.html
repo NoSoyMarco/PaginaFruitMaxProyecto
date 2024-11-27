@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FruitMax - Tienda de Frutas</title>
-    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
     <header>
@@ -12,7 +12,7 @@
         <nav>
             <a href="login.html">Iniciar sesión</a>
             <input type="text" id="buscador" placeholder="Buscar productos...">
-            <button onclick="buscarProducto()">Buscar</button>
+            <button id="btn-buscar">Buscar</button> <!-- Eliminado onclick -->
             <a href="carrito.html">🛒 Carrito</a>
         </nav>
     </header>
@@ -24,7 +24,13 @@
     <section id="productos">
         <!-- Aquí se mostrarán los productos dinámicamente -->
     </section>
+  
     
-    <script src="assets/scripts.js"></script>
+  <footer>
+    <p>© 2024 FruitMax. Todos los derechos reservados.</p>
+  </footer>
+
+    <script src="js/scripts.js"></script>
+
 </body>
 </html>
